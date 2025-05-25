@@ -20,9 +20,9 @@ class Database:
 
     def connect(self):
         if not self.connected:
-            self._conn = psycopg2.connect(database="postgres",
-                                host="10.0.0.240",
-                                port="5432",
+            self._conn = psycopg2.connect(database=os.environ["DB_NAME"],
+                                host=os.environ["DB_HOST"],
+                                port=os.environ["DB_PORT"],
                                 user=os.environ["DB_USER"],
                                 password=os.environ["DB_PASSWORD"])
             self._cur = self._conn.cursor()
@@ -32,7 +32,7 @@ class Database:
         if self.connected:
             self._cur.close()
             self._conn.close()
-            self.connected = False 
+            self.connected = False
 
     def query(self, q, all=False):
         if not self.connected:
@@ -40,12 +40,11 @@ class Database:
 
         try:
             self._cur.execute(q)
-            print(q)
         except psycopg2.Error as e:
             self._conn.rollback()
             raise e
-        else:
-            if q.startswith("SELECT") or q.startswith("select"):
-                res = self._cur.fetchall() if all else self._cur.fetchone()
-                self._conn.commit()
-                return res
+
+        self._conn.commit()
+
+        if q.startswith("SELECT") or q.startswith("select"):
+            return self._cur.fetchall() if all else self._cur.fetchone()

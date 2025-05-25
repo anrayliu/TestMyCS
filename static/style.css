@@ -10,12 +10,13 @@
 }
 
 .question-container {
-    height: 40%;
+    min-height: 40%;
     width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
     background: white;
+    padding: 20px;
 
     border-style: solid;
     outline-color: black;
@@ -43,6 +44,7 @@
 .slanted-btn {
     padding: 20px 50px;
     margin: 0 10px;
+    width: 200px;
     transform: skewX(-15deg);
     transition: all 0.3s ease;
     text-decoration: none;
@@ -50,10 +52,6 @@
 
 .slanted-btn:disabled {
   cursor: default;
-}
-
-.animated:hover {
-    transform: skewX(-15deg) scale(1.05);
 }
 
 .btn-white {
@@ -74,19 +72,15 @@
 
 .btn-next {
     padding: 5px 100px;
-    margin-left: 20px;
+    margin-left: 10px;
     transform: skewX(30deg);
     transition: all 0.3s ease;
 }
 
-.btn-next:hover {
-    transform: skewX(30deg) scale(1.05);
-}
-
-.checkmark {
+.mark {
     position: absolute;
-    top: -12px;
-    right: -12px;
+    top: -8px;
+    right: -8px;
     width: 40px;
     height: 40px;
     background: white;
@@ -96,10 +90,18 @@
     align-items: center;
     justify-content: center;
 }
+
+#correct {
+    fill: green;
+}
+
+#incorrect {
+    fill: red;
+}
+
 .checkmark svg {
     width: 50px;
     height: 50px;
-    fill: green;
 }
 
 .fade-in-up {
@@ -111,4 +113,11 @@
 .fade-in-up.show {
     opacity: 1;
     transform: translateY(0);
+}
+
+.credits {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-right: 4px;
 }
