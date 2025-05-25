@@ -16,7 +16,7 @@
     justify-content: center;
     align-items: center;
     background: white;
-    padding: 20px;
+    padding: 30px;
 
     border-style: solid;
     outline-color: black;
@@ -89,6 +89,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.wrap-center {
+    text-align: center;
 }
 
 #correct {

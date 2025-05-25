@@ -13,11 +13,11 @@ db = Database()
 def root():
     count = db.query("SELECT COUNT(*) FROM questions;")[0]
     qid = random.randint(1, count)
-    return redirect(f"/questions?id={qid}")
+    return redirect(f"/questions?qid={qid}")
 
 @app.route("/questions", methods=["GET", "POST"])
 def question():
-    qid = request.args.get("id")
+    qid = request.args.get("qid")
     question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
 
     if request.method == "POST":
@@ -27,7 +27,8 @@ def question():
 
 @app.route("/api/v1")
 def api_endpoint():
-    qid = request.args.get("id")
+    qid = request.args.get("qid")
+
     try:
         question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
     except TypeError:

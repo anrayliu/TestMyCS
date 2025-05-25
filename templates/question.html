@@ -6,7 +6,7 @@
 
 
 {% block body %}
-<script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const animatedElements = document.querySelectorAll('.fade-in-up');
             
@@ -21,7 +21,7 @@
     <h1>
         <div class="main-container">
             <div class="question-container">
-                <span class="roboto h1 {% if choice != 'false' and choice != 'true' %}fade-in-up{% endif %}">{{question}}</span>
+                <span class="roboto h1 wrap-center {% if choice != 'false' and choice != 'true' %}fade-in-up{% endif %}">{{question}}</span>
             </div>
             <div class="choices-container">
 
