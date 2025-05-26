@@ -22,7 +22,7 @@
     outline-color: black;
     margin-top: -3px;
     transform: skewX(-15deg);
-
+    box-shadow: 10px 10px 5px #aaaaaa;
 }
 
 .choices-container {
@@ -39,6 +39,7 @@
     outline-color: black;
     margin-top: -3px;
     transform: skewX(-15deg);
+    box-shadow: 10px 10px 5px #aaaaaa;
 }
 
 .slanted-btn {
@@ -89,18 +90,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.wrap-center {
-    text-align: center;
-}
-
-#correct {
-    fill: green;
-}
-
-#incorrect {
-    fill: red;
 }
 
 .checkmark svg {

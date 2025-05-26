@@ -5,17 +5,26 @@ def init_db(db):
     db.query("DROP TABLE IF EXISTS questions;")
 
     db.query('''CREATE TABLE questions (
-                    qid SERIAL PRIMARY KEY,
+                    qid integer PRIMARY KEY,
                     question text NOT NULL,
                     answer boolean NOT NULL
                 );''')
-    
-    db.query('''
-            INSERT INTO questions VALUES (DEFAULT, 'In a binary max-heap, the maximum element is always at the root.', true);
-            INSERT INTO questions VALUES (DEFAULT, 'Dijkstra''s algorithm works correctly on graphs with negative edge weights.', false);
-            INSERT INTO questions VALUES (DEFAULT, 'A greedy algorithm always provides an optimal solution.', false);
-             ''')
 
+    db.query('''CREATE TABLE explanations (
+                    qid integer PRIMARY KEY,
+                    explanation text NOT NULL
+                );''')
+
+    db.query('''
+            INSERT INTO questions VALUES (1, 'Python is a weakly typed language.', false);
+            INSERT INTO questions VALUES (2, 'SQL is turing complete.', true);
+            INSERT INTO questions VALUES (3, 'Software made for different CPU architectures are not cross-compatible.', true);
+            INSERT INTO questions VALUES (4, 'The BIOS boots into the operating system.', false);
+
+            INSERT INTO explanations VALUES (1, 'Python is strongly, dynamically typed.');
+            INSERT INTO explanations VALUES (4, 'The BIOS locates the bootloader, which then boots into the operating system.');
+            ''')
+    
 
 if __name__ == "__main__":
     with Database() as db:
