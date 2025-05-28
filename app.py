@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, abort
 from database import Database
 import random
 import os
@@ -10,6 +10,11 @@ app = Flask(__name__)
 db = Database()
 
 
+@app.errorhandler(400)
+@app.errorhandler(404)
+def handle_bad_request(e):
+    return render_template("error.html", error_code=e.code), e.code
+
 @app.route("/")
 def index():
     count = db.query("SELECT COUNT(*) FROM questions;")[0]
@@ -19,7 +24,13 @@ def index():
 @app.route("/questions", methods=["GET", "POST"])
 def question():
     qid = request.args.get("qid")
-    question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid};")
+    if qid is None or not qid.isnumeric():
+        abort(400)
+    
+    try:
+        question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid};")
+    except TypeError:
+        abort(400)
 
     if request.method == "POST":
         choice = request.form.get("choice")
@@ -33,19 +44,22 @@ def question():
         return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg)
     else:
         return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None)
-    
-@app.route("/report")
-def report():
-    return render_template("report.html")
 
 @app.route("/api/v1")
 def api_endpoint():
     qid = request.args.get("qid")
-    if qid is None:
+    if qid is None or qid == "":
         return json.dumps(
             {
                 "status": 400,
                 "message": "Missing qid."
+            }, indent=4)
+
+    if not qid.isnumeric():
+        return json.dumps(
+            {
+                "status": 400,
+                "message": "Qid must be an integer."
             }, indent=4)
 
     try:

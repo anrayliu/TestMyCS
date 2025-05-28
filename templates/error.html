@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>400 Bad Request</title>
+
+    <style>
+    .skew-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        border-style: hidden;
+    }
+    
+    .skew-column {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 40%;
+        height: 100%;
+        background: white;
+        margin-top: 5px;
+        border-style: solid;
+        transform: translateX(-50%) skew(-15deg);
+        overflow: hidden;
+        box-shadow: 10px 10px 5px #aaaaaa;
+
+    }
+
+    .scroll-track {
+        position: absolute;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        animation: scroll-up 15s linear infinite;
+        line-height: 1.2;
+    }
+
+    .line {
+        text-align: center;
+        font-size: 12rem;
+        color: black;
+    }
+
+    @keyframes scroll-up {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(-50%);
+        }
+    }
+  </style>
+{% endblock %}
+
+
+{% block body %}
+<div class="skew-container">
+    <div class="skew-column">
+      <div class="scroll-track">
+        <div>
+          <div class="line roboto">{{error_code}}</div>
+          <div class="line roboto">{{error_code}}</div>
+          <div class="line roboto">{{error_code}}</div>
+          <div class="line roboto">{{error_code}}</div>
+        </div>
+        <div>
+          <div class="line roboto">{{error_code}}</div>
+          <div class="line roboto">{{error_code}}</div>
+          <div class="line roboto">{{error_code}}</div>
+          <div class="line roboto">{{error_code}}</div>
+        </div>
+      </div>
+  </div>
+
+</div>
+
+{% endblock %}
