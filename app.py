@@ -1,12 +1,14 @@
 from flask import Flask, render_template, redirect, request
 from database import Database
 import random
+import os
 import json
 
 
 app = Flask(__name__)
 
 db = Database()
+
 
 @app.route("/")
 def index():
@@ -36,22 +38,34 @@ def question():
 def report():
     return render_template("report.html")
 
+@app.route("/api/v1")
+def api_endpoint():
+    qid = request.args.get("qid")
+    if qid is None:
+        return json.dumps(
+            {
+                "status": 400,
+                "message": "Missing qid."
+            }, indent=4)
 
-# @app.route("/api/v1")
-# def api_endpoint():
-#     qid = request.args.get("qid")
-
-#     try:
-#         question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
-#     except TypeError:
-#         return "Bad qid", 400
-
-#     return json.dumps({
-#         "question": question,
-#         "answer": answer
-#     })
+    try:
+        question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
+    except TypeError:
+        return json.dumps(
+        {
+            "status": 400,
+            "message": "Qid does not exist."
+        }, indent=4)
+    
+    return json.dumps(
+    {
+        "status": 200,
+        "message": "Content retrieved successfully.",
+        "question": question,
+        "answer": answer
+    }, indent=4)
 
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    app.run(port=os.environ["APP_PORT"], debug=True)
     db.close()

@@ -1,4 +1,5 @@
-from main import app 
+from main import app
+import os
 
 if __name__ == "__main__":
-    app.run(port="5001")
+    app.run(port=os.environ["APP_PORT"])

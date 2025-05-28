@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title></title>
+    <title>Question {{qid}}</title>
 {% endblock %}
 
 
@@ -25,8 +25,9 @@
                     {% if msg is not none %}
                         <span style="text-decoration: underline;">{{msg}}</span>
                     {% else %}
-                        {{question}}
+                    {{question}}
                     {% endif %}
+                    
                 </span>
             </div>
             <div class="choices-container">
