@@ -27,12 +27,14 @@ def index():
         session["answered"] = []
 
     qid = random.choice(list(set(range(1, count + 1)).difference(set(session["answered"]))))
-    session["answered"] = session["answered"] + [qid]
 
     return redirect(f"/questions?qid={qid}")
 
 @app.route("/questions", methods=["GET", "POST"])
 def question():
+    if not session.get("answered"):
+        session["answered"] = []
+
     count = db.query("SELECT COUNT(*) FROM questions;")[0]
 
     qid = request.args.get("qid")
@@ -45,6 +47,9 @@ def question():
         abort(400)
 
     if request.method == "POST":
+        if not qid in session["answered"]:
+            session["answered"] = session["answered"] + [qid]
+
         choice = request.form.get("choice")
         msg = None 
 
@@ -53,9 +58,9 @@ def question():
             if msg is not None:
                 msg = msg[0]
 
-        return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]) - 1, total=count)
+        return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]), total=count)
     else:
-        return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]) - 1, total=count)
+        return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]), total=count)
 
 @app.route("/api/v1")
 def api_endpoint():
