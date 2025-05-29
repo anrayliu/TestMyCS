@@ -8,6 +8,8 @@ import json
 app = Flask(__name__)
 app.secret_key = os.environ["APP_SESSION_KEY"]
 
+db = Database()
+
 
 @app.errorhandler(400)
 @app.errorhandler(404)
@@ -91,7 +93,5 @@ def api_endpoint():
 
 
 if __name__ == "__main__":
-    db = Database()
-
     app.run(port=os.environ["APP_PORT"], debug=True)
     db.close()
