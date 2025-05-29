@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, abort
+from flask import Flask, render_template, redirect, request, abort, session
 from database import Database
 import random
 import os
@@ -6,8 +6,7 @@ import json
 
 
 app = Flask(__name__)
-
-db = Database()
+app.secret_key = os.environ["APP_SESSION_KEY"]
 
 
 @app.errorhandler(400)
@@ -17,12 +16,23 @@ def handle_bad_request(e):
 
 @app.route("/")
 def index():
+    if not session.get("answered"):
+        session["answered"] = []
+
     count = db.query("SELECT COUNT(*) FROM questions;")[0]
-    qid = random.randint(1, count)
+
+    if len(session["answered"]) == count:
+        session["answered"] = []
+
+    qid = random.choice(list(set(range(1, count + 1)).difference(set(session["answered"]))))
+    session["answered"] = session["answered"] + [qid]
+
     return redirect(f"/questions?qid={qid}")
 
 @app.route("/questions", methods=["GET", "POST"])
 def question():
+    count = db.query("SELECT COUNT(*) FROM questions;")[0]
+
     qid = request.args.get("qid")
     if qid is None or not qid.isnumeric():
         abort(400)
@@ -41,9 +51,9 @@ def question():
             if msg is not None:
                 msg = msg[0]
 
-        return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg)
+        return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]) - 1, total=count)
     else:
-        return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None)
+        return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]) - 1, total=count)
 
 @app.route("/api/v1")
 def api_endpoint():
@@ -81,5 +91,7 @@ def api_endpoint():
 
 
 if __name__ == "__main__":
+    db = Database()
+
     app.run(port=os.environ["APP_PORT"], debug=True)
     db.close()
