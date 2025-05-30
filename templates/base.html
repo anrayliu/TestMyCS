@@ -30,12 +30,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto">
-                    <!-- <li class="nav-item">
-                    <a class="nav-link">LogIn</a>
-                    </li>
                     <li class="nav-item">
-                    <a class="nav-link">SignUp</a>
-                    </li> -->
+                    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#reset">ResetProgress</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://github.com/anrayliu/TestMyCS">Report/ContributeQuestion</a>
                     </li>
@@ -46,7 +43,27 @@
 
         {% block body %}
         {% endblock %}
-        
-        <span class="credits roboto h5">Completed-{{completed}}/{{total}}</span>
+
+        <div class="modal fade roboto" id="reset" tabindex="-1" aria-labelledby="reset" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="reset">Reset</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    This will reset your completed questions. Proceed?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="border-radius: 0 !important;" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                    <form action="/question?qid={{qid}}" method="post">
+                        <button type="submit" style="border-radius: 0 !important;" class="btn btn-primary btn-white custom-highlight" name="reset" value="true" type="submit">Reset</button>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

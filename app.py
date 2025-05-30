@@ -3,13 +3,19 @@ from database import Database
 import random
 import os
 import json
+import datetime
 
 
 app = Flask(__name__)
 app.secret_key = os.environ["APP_SESSION_KEY"]
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 
 db = Database()
 
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
 
 @app.errorhandler(400)
 @app.errorhandler(404)
@@ -32,9 +38,6 @@ def index():
 
 @app.route("/questions", methods=["GET", "POST"])
 def question():
-    if not session.get("answered"):
-        session["answered"] = []
-
     count = db.query("SELECT COUNT(*) FROM questions;")[0]
 
     qid = request.args.get("qid")
@@ -47,20 +50,26 @@ def question():
         abort(400)
 
     if request.method == "POST":
-        if not qid in session["answered"]:
-            session["answered"] = session["answered"] + [qid]
+        if not session.get("answered"):
+            session["answered"] = []
+        
+        if request.form.get("reset") == "true":
+            session["answered"] = []
+        else:
+            if not qid in session["answered"]:
+                session["answered"] = session["answered"] + [qid]
 
-        choice = request.form.get("choice")
-        msg = None 
+            choice = request.form.get("choice")
+            msg = None 
 
-        if choice != str(answer).lower():
-            msg = db.query(f"SELECT explanation FROM explanations WHERE qid={qid};")
-            if msg is not None:
-                msg = msg[0]
+            if choice != str(answer).lower():
+                msg = db.query(f"SELECT explanation FROM explanations WHERE qid={qid};")
+                if msg is not None:
+                    msg = msg[0]
 
-        return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]), total=count)
-    else:
-        return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]), total=count)
+            return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]), total=count)
+
+    return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]), total=count)
 
 @app.route("/api/v1")
 def api_endpoint():
