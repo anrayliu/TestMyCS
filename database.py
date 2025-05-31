@@ -18,6 +18,9 @@ class Database:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
+    def __del__(self):
+        self.close()
+
     def connect(self):
         if not self.connected:
             self._conn = psycopg2.connect(database=os.environ["DB_NAME"],

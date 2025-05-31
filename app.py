@@ -1,26 +1,33 @@
-from flask import Flask, render_template, redirect, request, abort, session
+from flask import Flask, render_template, redirect, request, abort, session, jsonify
+from dotenv import load_dotenv
 from database import Database
+from init_db import init
 import random
 import os
-import json
 import datetime
 
 
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = os.environ["APP_SESSION_KEY"]
-app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
+
+app.config["SECRET_KEY"] = os.environ["APP_SESSION_KEY"]
+app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=365)
 
 db = Database()
+init()
 
 
 @app.before_request
 def make_session_permanent():
     session.permanent = True
 
+
 @app.errorhandler(400)
 @app.errorhandler(404)
 def handle_bad_request(e):
     return render_template("error.html", error_code=e.code), e.code
+
 
 @app.route("/")
 def index():
@@ -35,6 +42,7 @@ def index():
     qid = random.choice(list(set(range(1, count + 1)).difference(set(session["answered"]))))
 
     return redirect(f"/questions?qid={qid}")
+
 
 @app.route("/questions", methods=["GET", "POST"])
 def question():
@@ -71,41 +79,41 @@ def question():
 
     return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]), total=count)
 
+
 @app.route("/api/v1")
 def api_endpoint():
     qid = request.args.get("qid")
     if qid is None or qid == "":
-        return json.dumps(
+        return jsonify(
             {
                 "status": 400,
                 "message": "Missing qid."
-            }, indent=4)
+            })
 
     if not qid.isnumeric():
-        return json.dumps(
+        return jsonify(
             {
                 "status": 400,
                 "message": "Qid must be an integer."
-            }, indent=4)
+            })
 
     try:
         question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
     except TypeError:
-        return json.dumps(
+        return jsonify(
         {
             "status": 400,
             "message": "Qid does not exist."
-        }, indent=4)
+        })
     
-    return json.dumps(
+    return jsonify(
     {
         "status": 200,
         "message": "Content retrieved successfully.",
         "question": question,
         "answer": answer
-    }, indent=4)
+    })
 
 
 if __name__ == "__main__":
     app.run(port=os.environ["APP_PORT"], debug=True)
-    db.close()
