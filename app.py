@@ -44,6 +44,9 @@ def index():
 
 @app.route("/questions", methods=["GET", "POST"])
 def question():
+    if not session.get("answered"):
+        session["answered"] = []
+
     count = db.query("SELECT COUNT(*) FROM questions;")[0]
 
     qid = request.args.get("qid")
@@ -56,9 +59,6 @@ def question():
         abort(400)
 
     if request.method == "POST":
-        if not session.get("answered"):
-            session["answered"] = []
-        
         if request.form.get("reset") == "true":
             session["answered"] = []
         else:
