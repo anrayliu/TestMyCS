@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect, request, abort, session, jsonify
 from dotenv import load_dotenv
 from database import Database
-from init_db import init
 import random
 import os
 import datetime
@@ -15,7 +14,6 @@ app.config["SECRET_KEY"] = os.environ["APP_SESSION_KEY"]
 app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=365)
 
 db = Database()
-init()
 
 
 @app.before_request

@@ -20,7 +20,7 @@
 
     border-style: solid;
     outline-color: black;
-    margin-top: -3px;
+    margin-top: -2px;
     transform: skewX(-15deg);
     box-shadow: 10px 10px 5px #aaaaaa;
 }
@@ -37,7 +37,7 @@
 
     border-style: solid;
     outline-color: black;
-    margin-top: -3px;
+    margin-top: -2px;
     transform: skewX(-15deg);
     box-shadow: 10px 10px 5px #aaaaaa;
 }

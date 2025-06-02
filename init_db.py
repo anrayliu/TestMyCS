@@ -1,17 +1,26 @@
-from database import Database
+import psycopg2
+import os
+from dotenv import load_dotenv
 
 
-def init(db):
-    db.query("DROP TABLE IF EXISTS questions;")
-    db.query("DROP TABLE IF EXISTS explanations;")
+def populate_db():
+    conn = psycopg2.connect(database=os.environ["DB_NAME"],
+                              host=os.environ["DB_HOST"],
+                              port=os.environ["DB_PORT"],
+                              user=os.environ["DB_USER"],
+                              password=os.environ["DB_PASSWORD"])
+    cur = conn.cursor()
 
-    db.query('''CREATE TABLE questions (
+    cur.execute("DROP TABLE IF EXISTS questions;")
+    cur.execute("DROP TABLE IF EXISTS explanations;")
+
+    cur.execute('''CREATE TABLE questions (
                     qid integer PRIMARY KEY,
                     question text NOT NULL,
                     answer boolean NOT NULL
                 );''')
 
-    db.query('''CREATE TABLE explanations (
+    cur.execute('''CREATE TABLE explanations (
                     qid integer PRIMARY KEY,
                     explanation text NOT NULL
                 );''')
@@ -30,7 +39,7 @@ def init(db):
     #         INSERT INTO explanations VALUES (4, 'The BIOS locates the bootloader, which then boots into the operating system.');
     #         ''')
 
-    db.query('''
+    cur.execute('''
             INSERT INTO questions VALUES (1, 'Python is a weakly typed language.', false);
             INSERT INTO questions VALUES (2, 'SQL is Turing complete.', true);
             INSERT INTO questions VALUES (3, 'Software made for different CPU architectures are not cross-compatible.', true);
@@ -266,8 +275,13 @@ def init(db):
             INSERT INTO explanations VALUES (183, 'C structs can only contain data members; use function pointers to simulate methods.');
             INSERT INTO explanations VALUES (195, 'Returning a pointer to a local variable is unsafe as the memory becomes invalid after the function returns.');
             ''')
-    
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
 
 if __name__ == "__main__":
-    with Database() as db:
-        init(db)
+    load_dotenv()
+    populate_db()

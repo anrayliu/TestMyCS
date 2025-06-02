@@ -11,6 +11,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "app:app"]
-
-# docker run --env-file secrets.env -p 5001:5001 testmycs:latest
+CMD ["gunicorn", "-w", "4", "--bind", "0.0.0.0:5001", "app:app"]
