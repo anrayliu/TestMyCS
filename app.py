@@ -54,7 +54,7 @@ def question():
         abort(400)
     
     try:
-        question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid};")
+        q, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid};")
     except TypeError:
         abort(400)
 
@@ -73,9 +73,9 @@ def question():
                 if msg is not None:
                     msg = msg[0]
 
-            return render_template("question.html", qid=qid, question=question, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]), total=count)
+            return render_template("question.html", qid=qid, question=q, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]), total=count)
 
-    return render_template("question.html", qid=qid, question=question, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]), total=count)
+    return render_template("question.html", qid=qid, question=q, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]), total=count)
 
 
 @app.route("/api/v1")
@@ -96,7 +96,7 @@ def api_endpoint():
             })
 
     try:
-        question, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
+        q, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
     except TypeError:
         return jsonify(
         {
@@ -108,10 +108,10 @@ def api_endpoint():
     {
         "status": 200,
         "message": "Content retrieved successfully.",
-        "question": question,
+        "question": q,
         "answer": answer
     })
 
 
 if __name__ == "__main__":
-    app.run(port=os.environ["APP_PORT"], debug=True)
+    app.run(port=int(os.environ["APP_PORT"]), debug=True)

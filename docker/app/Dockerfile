@@ -5,6 +5,7 @@ RUN apt-get update && apt-get upgrade -y
 COPY requirements.txt .
 
 RUN python3 -m venv /opt/venv
+
 ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip install -r requirements.txt
