@@ -17,7 +17,7 @@ services:
       APP_PORT: ${APP_PORT}
     depends_on:
       - db
-    restart: on-failure:10
+    restart: on-failure
 
   db:
     image: postgres:17-alpine
@@ -28,20 +28,20 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
 
-#  dbinit:
-#    build:
-#      context: .
-#      dockerfile: ./docker/initdb/Dockerfile
-#    env_file: .env
-#    environment:
-#      DB_USER: ${DB_USER}
-#      DB_PASSWORD: ${DB_PASSWORD}
-#      DB_PORT: ${DB_PORT}
-#      DB_NAME: ${DB_NAME}
-#      DB_HOST: ${DB_HOST}
-#    depends_on:
-#      - db
-#    restart: on-failure:10
+  dbinit:
+    build:
+      context: .
+      dockerfile: ./docker/initdb/Dockerfile
+    env_file: .env
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+    depends_on:
+      - db
+    restart: on-failure:10
 
   tunnel:
     image: cloudflare/cloudflared
