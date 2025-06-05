@@ -11,7 +11,7 @@ load_dotenv()
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.environ["APP_SESSION_KEY"]
-app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=365)
+app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=float(os.environ["APP_COOKIES_LIFETIME"]))
 
 db = Database()
 
@@ -54,7 +54,7 @@ def question():
         abort(400)
     
     try:
-        q, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid};")
+        q, answer = db.query("SELECT question, answer FROM questions WHERE qid=%s;", args=(qid,))
     except TypeError:
         abort(400)
 
@@ -69,7 +69,7 @@ def question():
             msg = None 
 
             if choice != str(answer).lower():
-                msg = db.query(f"SELECT explanation FROM explanations WHERE qid={qid};")
+                msg = db.query("SELECT explanation FROM explanations WHERE qid=%s;", args=(qid,))
                 if msg is not None:
                     msg = msg[0]
 
@@ -96,7 +96,7 @@ def api_endpoint():
             })
 
     try:
-        q, answer = db.query(f"SELECT question, answer FROM questions WHERE qid={qid}")
+        q, answer = db.query("SELECT question, answer FROM questions WHERE qid=%s", args=(qid,))
     except TypeError:
         return jsonify(
         {

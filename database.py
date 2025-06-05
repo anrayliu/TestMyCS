@@ -37,12 +37,12 @@ class Database:
             self._conn.close()
             self.connected = False
 
-    def query(self, q, all=False):
+    def query(self, q, all=False, args=None):
         if not self.connected:
             raise Exception("Not connected.")
 
         try:
-            self._cur.execute(q)
+            self._cur.execute(q, args)
         except psycopg2.Error as e:
             self._conn.rollback()
             raise e
