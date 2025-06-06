@@ -18,6 +18,8 @@ services:
     depends_on:
       - db
     restart: on-failure
+    networks:
+      - backend_network
 
   db:
     image: postgres:17-alpine
@@ -27,6 +29,8 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - backend_network
 
   dbinit:
     build:
@@ -42,6 +46,8 @@ services:
     depends_on:
       - db
     restart: on-failure:10
+    networks:
+      - backend_network
 
   tunnel:
     image: cloudflare/cloudflared
@@ -50,6 +56,8 @@ services:
       - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
     depends_on:
       - proxy
+    networks:
+      - proxy_network
 
   proxy:
     image: nginx:alpine
@@ -60,6 +68,13 @@ services:
       - ./static/:/app-static/
     depends_on:
       - app
+    networks:
+      - proxy_network
+      - backend_network
 
 volumes:
   dbdata:
+
+networks:
+  backend_network:
+  proxy_network:
