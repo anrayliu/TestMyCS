@@ -37,7 +37,8 @@ def index():
     if len(session["answered"]) == count:
         session["answered"] = []
 
-    qid = random.choice(list(set(range(1, count + 1)).difference(set(session["answered"]))))
+    # get questions that have not been answered yet
+    qid = random.choice(list(set(map(str, range(1, count + 1))).difference(set(session["answered"]))))
 
     return redirect(f"/questions?qid={qid}")
 
