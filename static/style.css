@@ -16,35 +16,33 @@
     justify-content: center;
     align-items: center;
     background: white;
-    padding: 30px;
-
+    padding: 2rem;
     border-style: solid;
     outline-color: black;
-    margin-top: -2px;
+    margin-top: -3px;
     transform: skewX(-15deg);
     box-shadow: 10px 10px 5px #aaaaaa;
 }
 
 .choices-container {
-    height: 40%;
     width: 60%;
+    padding: 5rem 0;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px; /* vertical gap between true/false buttons and next button */
     justify-content: center;
     align-items: center;
     background: white;
-
     border-style: solid;
     outline-color: black;
-    margin-top: -2px;
+    margin-top: -3px;
     transform: skewX(-15deg);
     box-shadow: 10px 10px 5px #aaaaaa;
 }
 
 .slanted-btn {
     padding: 20px 50px;
-    margin: 0 10px;
+    margin: 0 10px; /* gap between true and false buttons */
     width: 200px;
     transform: skewX(-15deg);
     transition: all 0.3s ease;
