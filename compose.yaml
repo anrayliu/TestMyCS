@@ -45,7 +45,7 @@ services:
       DB_HOST: ${DB_HOST}
     depends_on:
       - db
-    restart: on-failure:10
+    restart: on-failure
     networks:
       - backend_network
 
