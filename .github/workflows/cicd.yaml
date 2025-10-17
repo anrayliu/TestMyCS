@@ -56,4 +56,5 @@ jobs:
           script: |
             cd /server \
             && docker compose pull \
+            && docker compose down \
             && docker compose up
