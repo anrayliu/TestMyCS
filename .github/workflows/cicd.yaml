@@ -29,6 +29,10 @@ jobs:
 
       - name: Build images
         run: |
+          # bit of a hack, won't build if ports are empty
+          export APP_PORT=1
+          export DB_PORT=1
+          
           docker compose build
           docker tag testmycs-app anrayliu/testmycs:app
           docker tag testmycs-dbinit anrayliu/testmycs:dbinit
