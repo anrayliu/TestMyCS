@@ -8,13 +8,6 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
     env_file: .env
-    environment:
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: ${DB_HOST}
-      APP_PORT: ${APP_PORT}
     depends_on:
       dbinit:
         condition: service_completed_successfully
@@ -44,12 +37,6 @@ services:
       context: .
       dockerfile: ./docker/initdb/Dockerfile
     env_file: .env
-    environment:
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: ${DB_HOST}
     depends_on:
       db:
         condition: service_healthy
@@ -61,7 +48,7 @@ services:
     image: cloudflare/cloudflared
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
     environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+      TUNNEL_TOKEN: ${CLOUDFLARE_TOKEN}
     depends_on:
       - proxy
     networks:
