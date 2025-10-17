@@ -8,15 +8,9 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
     env_file: .env
-    environment:
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: ${DB_HOST}
-      APP_PORT: ${APP_PORT}
     depends_on:
-      - db
+      dbinit:
+        condition: service_completed_successfully
     restart: on-failure
     networks:
       - backend_network
@@ -29,6 +23,12 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
       - backend_network
 
@@ -37,15 +37,10 @@ services:
       context: .
       dockerfile: ./docker/initdb/Dockerfile
     env_file: .env
-    environment:
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: ${DB_HOST}
     depends_on:
-      - db
-    restart: on-failure:10
+      db:
+        condition: service_healthy
+    restart: on-failure
     networks:
       - backend_network
 
@@ -53,7 +48,7 @@ services:
     image: cloudflare/cloudflared
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
     environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+      TUNNEL_TOKEN: ${CLOUDFLARE_TOKEN}
     depends_on:
       - proxy
     networks:

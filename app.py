@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from database import Database
 import random
 import os
-import datetime
 
 
 load_dotenv()
@@ -11,7 +10,6 @@ load_dotenv()
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.environ["APP_SESSION_KEY"]
-app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=float(os.environ["APP_COOKIES_LIFETIME"]))
 
 db = Database()
 
@@ -77,41 +75,6 @@ def question():
             return render_template("question.html", qid=qid, question=q, answer=answer, next=True, choice=choice, msg=msg, completed=len(session["answered"]), total=count)
 
     return render_template("question.html", qid=qid, question=q, answer=answer, next=False, choice=None, msg=None, completed=len(session["answered"]), total=count)
-
-
-@app.route("/api/v1")
-def api_endpoint():
-    qid = request.args.get("qid")
-    if qid is None or qid == "":
-        return jsonify(
-            {
-                "status": 400,
-                "message": "Missing qid."
-            })
-
-    if not qid.isnumeric():
-        return jsonify(
-            {
-                "status": 400,
-                "message": "Qid must be an integer."
-            })
-
-    try:
-        q, answer = db.query("SELECT question, answer FROM questions WHERE qid=%s", args=(qid,))
-    except TypeError:
-        return jsonify(
-        {
-            "status": 400,
-            "message": "Qid does not exist."
-        })
-    
-    return jsonify(
-    {
-        "status": 200,
-        "message": "Content retrieved successfully.",
-        "question": q,
-        "answer": answer
-    })
 
 
 if __name__ == "__main__":
