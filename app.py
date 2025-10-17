@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from database import Database
 import random
 import os
-import datetime
 
 
 load_dotenv()
@@ -11,7 +10,6 @@ load_dotenv()
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.environ["APP_SESSION_KEY"]
-app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=float(os.environ["APP_COOKIES_LIFETIME"]))
 
 db = Database()
 
