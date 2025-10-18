@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: github.ref
+          ref: ${{ github.ref }}
 
       - name: Check if code changed
         uses: dorny/paths-filter@v3
@@ -45,6 +45,7 @@ jobs:
               - "*.py"
               - "compose.yaml"
               - "nginx.conf"
+          base: ${{ github.event.before || 'HEAD^1' }}
 
   run-tests:
     runs-on: ubuntu-latest
