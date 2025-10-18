@@ -30,6 +30,8 @@ jobs:
       src: ${{ steps.filter.outputs.src }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: github.ref
 
       - name: Check if code changed
         uses: dorny/paths-filter@v3
