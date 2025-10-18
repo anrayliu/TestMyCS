@@ -24,17 +24,14 @@ jobs:
           VALIDATE_YAML: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  paths-filter:
+  changes:
     runs-on: ubuntu-latest
     outputs:
-      changes: ${{ steps.changes }}
-
+      src: ${{ steps.filter.outputs.src }}
     steps:
-      - uses: actions/checkout@v4
-
       - name: Check if code changed
         uses: dorny/paths-filter@v3
-        id: changes
+        id: filter
         with:
           filters: |
             src:
