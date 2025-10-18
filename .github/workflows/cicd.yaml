@@ -78,8 +78,6 @@ jobs:
           export DB_PORT=1
           
           docker compose build
-          docker tag testmycs-app anrayliu/testmycs:app
-          docker tag testmycs-dbinit anrayliu/testmycs:dbinit
 
       - name: Push images
         run: |
