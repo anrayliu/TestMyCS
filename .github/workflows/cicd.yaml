@@ -52,7 +52,7 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     steps:
-      - name: Placeholder test
+      - name: Placeholder test, currently only running status tests
         run: echo "tests passed"
 
   build-and-push:

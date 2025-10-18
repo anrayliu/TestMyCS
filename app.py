@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, abort, session, jsonify
+from flask import Flask, render_template, redirect, request, abort, session
 from dotenv import load_dotenv
 from database import Database
 import random
