@@ -1,5 +1,7 @@
 ## TestMyCS.com
 
+![img.png](img.png)
+
 Test your breadth of CS knowledge with easily-digestible true/false questions!
 
 This project was developed to explore the entire software lifecycle. It touches on many DevOps aspects, including 
