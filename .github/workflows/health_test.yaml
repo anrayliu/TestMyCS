@@ -5,6 +5,7 @@ on:
     # every day at 9am
     - cron: '0 9 * * *'
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   ping-website:
