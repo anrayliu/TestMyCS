@@ -32,6 +32,10 @@ def populate_db():
                 INSERT INTO explanations VALUES (1, 'Argo CD does not automatically detect or block overlapping resource management between applications. Both apps will attempt to apply their manifests, and the last one to sync will “win,” potentially overwriting changes made by the other.');
     ''')
 
+    cur.execute('''
+                INSERT INTO questions VALUES (2, 'In a Kubernetes cluster using etcd as its backing store, if you configure --quorum-read=false on the kube-apiserver, it allows the API server to read from any etcd member regardless of whether it has the most recent data, which can improve read performance but may result in stale reads during network partitions.', true);
+    ''')
+
     conn.commit()
 
     cur.close()
