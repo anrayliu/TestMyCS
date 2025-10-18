@@ -2,8 +2,8 @@
 name: Daily Health Test
 on:
   schedule:
-    # every day at 6am
-    - cron: '0 6 * * *'
+    # every day at 9am
+    - cron: '0 9 * * *'
   workflow_dispatch:
 
 jobs:
@@ -16,6 +16,5 @@ jobs:
           echo "Response code: $response_code"
           
           if [ "$response_code" -ne 200 ]; then
-            echo "website unhealthy"
             exit 1
           fi
