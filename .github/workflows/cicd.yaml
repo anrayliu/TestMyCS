@@ -1,9 +1,6 @@
 name: cicd
 
-on:
-  push:
-    branches:
-      - feat-cicd
+on: push
 
 jobs:
   lint:
@@ -52,6 +49,7 @@ jobs:
 
   build-and-push:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     needs: run-tests
     steps:
       - uses: actions/checkout@v5
