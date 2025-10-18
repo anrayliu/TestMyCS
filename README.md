@@ -5,7 +5,7 @@
 Test your breadth of CS knowledge with easily-digestible true/false questions!
 
 This project was developed to explore the entire software lifecycle. It touches on many DevOps aspects, including 
-cloud hosting, IaC, containerized deployments, artifact storage, CI/CD, vulnerability scans, health checks, and more.
+cloud hosting, IaC, containerized deployments, artifact storage, CI/CD, health checks, and more.
 
 ### Report a question
 
