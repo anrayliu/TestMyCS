@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile
+    image: anrayliu/testmycs:app
     ports:
     - ${APP_PORT}:${APP_PORT}
     volumes:
@@ -43,6 +44,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/initdb/Dockerfile
+    image: anrayliu/testmycs:dbinit
     env_file: .env
     depends_on:
       db:
