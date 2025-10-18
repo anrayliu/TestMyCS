@@ -6,8 +6,29 @@ on:
       - feat-cicd
 
 jobs:
+  paths-filter:
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.filter.outputs.workflows }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if code changed
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - "docker/**"
+              - "static/**"
+              - "templates/**"
+              - "*.py"
+              - "compose.yaml"
+              - "nginx.conf"
+
   run-tests:
     runs-on: ubuntu-latest
+    if: steps.changes.outputs.src == "true"
     steps:
       - name: Placeholder test
         run: echo "tests passed"
