@@ -106,4 +106,5 @@ jobs:
 
   health-check:
     name: Check if website is up
+    needs: restart-server
     uses: ./.github/workflows/health_test.yaml
