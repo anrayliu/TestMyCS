@@ -1,0 +1,21 @@
+---
+name: Daily Health Test
+on:
+  schedule:
+    # every day at 6am
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test website
+        run: |
+          response_code=$(curl -L -s -o /dev/null -w "%{http_code}" https://testmycs.com)
+          echo "Response code: $response_code"
+          
+          if [ "$response_code" -ne 200 ]; then
+            echo "website unhealthy"
+            exit 1
+          fi
