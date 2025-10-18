@@ -1,4 +1,4 @@
-## https://testmycs.com/
+## TestMyCS.com
 
 Test your breadth of CS knowledge with easily-digestible true/false questions!
 
