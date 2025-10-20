@@ -180,7 +180,7 @@ def populate_db():
                 INSERT INTO questions VALUES (136, 'All digital certificates contain a public key.', true);
                 INSERT INTO questions VALUES (137, 'The C programming language has native support for object-oriented programming.', false);
                 INSERT INTO questions VALUES (138, 'In relational databases, a foreign key must reference a primary key.', false);
-                INSERT INTO questions VALUES (139, 'Python is not a compiled language.', false);
+                INSERT INTO questions VALUES (139, 'Python is a compiled language because it produces byte code.', false);
                 INSERT INTO questions VALUES (140, 'The Dijkstra algorithm works for directed graphs with non-negative edge weights.', true);
                 INSERT INTO questions VALUES (141, 'In HTML, the <div> element is inline by default.', false);
                 INSERT INTO questions VALUES (142, 'Python supports abstract classes.', true);
@@ -204,7 +204,7 @@ def populate_db():
                 INSERT INTO questions VALUES (160, 'Python main.py files must include a main() function.', false);
                 INSERT INTO questions VALUES (161, 'The Java final keyword is equivalent to C++ const.', false);
                 INSERT INTO questions VALUES (162, 'In SQL, COUNT(*) counts only non-NULL values.', false);
-                INSERT INTO questions VALUES (163, 'All web browsers support WebAssembly.', true);
+                INSERT INTO questions VALUES (163, 'All major web browsers support WebAssembly.', true);
                 INSERT INTO questions VALUES (164, 'The C preprocessor runs after compilation.', false);
                 INSERT INTO questions VALUES (165, 'In Python, all exceptions must be caught explicitly.', false);
                 INSERT INTO questions VALUES (166, 'All programming languages have a string type.', false);
@@ -301,7 +301,7 @@ def populate_db():
                 INSERT INTO explanations VALUES (130, 'Clojure can integrate Java libraries.');
                 INSERT INTO explanations VALUES (137, 'C lacks native OOP support, though patterns can emulate some features.');
                 INSERT INTO explanations VALUES (138, 'Foreign keys can reference any candidate key (unique columns), not just primary keys.');
-                INSERT INTO explanations VALUES (139, 'Python is both compiled and interpreted.');
+                INSERT INTO explanations VALUES (139, 'Python is still not compiled because the interpretor executes the byte code as-is, and does not first compile into machine code.');
                 INSERT INTO explanations VALUES (145, 'SQLite is one of the only relational databases that has dynamic typing.');
                 INSERT INTO explanations VALUES (148, 'Both are container orchestration systems, but Kubernetes is more feature-rich.');
                 INSERT INTO explanations VALUES (149, 'C++ requires manual memory management or smart pointers (RAII). No built-in GC.');
