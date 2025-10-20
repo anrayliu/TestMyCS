@@ -99,8 +99,11 @@ jobs:
             cd /server \
             && docker compose pull \
             && sudo git pull \
+            && SECONDS=0 \
             && docker compose down \
-            && docker compose up -d
+            && docker compose up -d \
+            && duration=$SECONDS \
+            && echo "server down for $((duration / 60)) minutes and $((duration % 60)) seconds"
 
   health-check:
     name: Check if website is up
