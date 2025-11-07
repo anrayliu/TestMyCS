@@ -24,6 +24,11 @@ jobs:
           VALIDATE_YAML: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  trivy-scan:
+    uses: ./.github/workflows/trivy_scan.yaml
+    with:
+      verticals: '["dbinit", "app"]'
+
   changes:
     runs-on: ubuntu-latest
     outputs:
@@ -83,12 +88,6 @@ jobs:
         run: |
           docker push anrayliu/testmycs:app
           docker push anrayliu/testmycs:dbinit
-
-  nightly-trivy-scan:
-    needs: build-and-push
-    uses: ./.github/workflows/trivy_scan.yaml
-    with:
-      verticals: '["dbinit", "app"]'
 
   restart-server:
     runs-on: ubuntu-latest
