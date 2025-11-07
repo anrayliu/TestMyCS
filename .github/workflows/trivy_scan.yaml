@@ -1,0 +1,27 @@
+---
+name: CI Trivy Scans
+
+on:
+  workflow_call:
+    inputs:
+      verticals:
+        required: true
+        type: string
+
+jobs:
+  trivy-scan:
+    name: Trivy Vulnerability Scan for ${{ matrix.image }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        image: ${{ fromJSON(inputs.verticals) }}
+
+    steps:
+      - name: Security Scan Image ${{ matrix.image }}
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: docker.io/anrayliu/testmycs:${{ matrix.image }}
+          severity: "CRITICAL"
+          ignore-unfixed: true
+          exit-code: 1
