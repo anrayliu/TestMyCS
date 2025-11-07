@@ -4,31 +4,6 @@ name: cicd
 on: push
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Lint codebase
-        uses: super-linter/super-linter@v7
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_DOCKERFILE_HADOLINT: true
-          VALIDATE_GITHUB_ACTIONS: true
-          VALIDATE_PYTHON: true
-          VALIDATE_HTML: true
-          VALIDATE_CSS: true
-          VALIDATE_GITLEAKS: true
-          VALIDATE_YAML: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  trivy-scan:
-    uses: ./.github/workflows/trivy_scan.yaml
-    with:
-      verticals: '["dbinit", "app"]'
-
   changes:
     runs-on: ubuntu-latest
     outputs:
@@ -51,6 +26,33 @@ jobs:
               - "compose.yaml"
               - "nginx.conf"
           base: ${{ github.event.before || 'HEAD^1' }}
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: changes
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Lint codebase
+        uses: super-linter/super-linter@v7
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_DOCKERFILE_HADOLINT: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_PYTHON: true
+          VALIDATE_HTML: true
+          VALIDATE_CSS: true
+          VALIDATE_GITLEAKS: true
+          VALIDATE_YAML: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  trivy-scan:
+    needs: lint
+    uses: ./.github/workflows/trivy_scan.yaml
+    with:
+      verticals: '["dbinit", "app"]'
 
   run-tests:
     runs-on: ubuntu-latest
