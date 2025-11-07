@@ -1,0 +1,13 @@
+---
+name: CI Nightly Scans
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly-trivy-scan:
+    uses: ./.github/workflows/trivy_scan.yaml
+    with:
+      verticals: '["dbinit", "app"]'

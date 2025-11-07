@@ -84,6 +84,12 @@ jobs:
           docker push anrayliu/testmycs:app
           docker push anrayliu/testmycs:dbinit
 
+  nightly-trivy-scan:
+    needs: build-and-push
+    uses: ./.github/workflows/trivy_scan.yaml
+    with:
+      verticals: '["dbinit", "app"]'
+
   restart-server:
     runs-on: ubuntu-latest
     needs: build-and-push
