@@ -7,6 +7,8 @@ Test your breadth of CS knowledge with easily-digestible true/false questions!
 This project was developed to explore the entire software lifecycle. It touches on many DevOps aspects, including 
 cloud hosting, IaC, containerized deployments, artifact storage, CI/CD, health checks, and more.
 
+Terraform and Ansible configs: https://github.com/anrayliu/testmycs-iac
+
 ### Report a question
 
 All the questions can be found in `init_db.py`. To report incorrect information, feel free to open an issue.
